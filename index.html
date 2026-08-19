@@ -177,6 +177,23 @@ input[type=text]:focus,input[type=email]:focus,input[type=tel]:focus{border-colo
 .task.done .box::after{content:"";position:absolute;left:7px;top:3px;width:5px;height:10px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
 .task .txt{font-size:14.5px;line-height:1.4}
 .task.done .txt{color:#5f6672;text-decoration:line-through}
+/* painel inicial */
+.dashhead{background:linear-gradient(135deg,rgba(255,77,28,.16),rgba(123,47,255,.12));border:1px solid rgba(255,77,28,.32);
+  border-radius:16px;padding:18px;margin:16px 0 0;display:flex;gap:14px;align-items:flex-end;justify-content:space-between}
+.dh-k{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--orange)}
+.dh-v{font-family:'Bebas Neue',sans-serif;font-size:30px;line-height:1;margin-top:6px}
+.dh-s{color:var(--muted);font-size:13px;margin-top:6px;max-width:26ch}
+.dh-btn{flex:none;background:var(--orange);color:#fff;border:0;border-radius:10px;padding:11px 14px;cursor:pointer;
+  font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:.05em;white-space:nowrap}
+.dash{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:15px 14px 13px;text-align:left;
+  cursor:pointer;color:var(--text);font-family:'Outfit',sans-serif;display:flex;flex-direction:column;gap:5px;min-height:132px}
+.tile:active{border-color:var(--orange)}
+.tile svg{width:22px;height:22px;stroke:var(--orange);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;margin-bottom:2px}
+.tile b{font-family:'Bebas Neue',sans-serif;font-weight:400;font-size:21px;letter-spacing:.02em;line-height:1}
+.tile small{color:var(--muted);font-size:12.5px;line-height:1.35;flex:1}
+.tile .tag{font-family:'Space Mono',monospace;font-style:normal;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#5f6672}
+@media (max-width:340px){.dash{grid-template-columns:1fr}.dashhead{flex-direction:column;align-items:stretch}.dh-btn{width:100%}}
 .nextstep{margin-top:18px;border-top:1px solid var(--line);padding-top:16px}
 .nextstep .k{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
 .btnrow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
@@ -252,32 +269,71 @@ footer a{color:var(--orange);text-decoration:none}
     <div class="rule"></div>
   </div>
 
-  <!-- ================= INÍCIO ================= -->
+  <!-- ================= INÍCIO (PAINEL) ================= -->
   <section class="view active" id="v-inicio">
+
+    <div class="dashhead">
+      <div>
+        <div class="dh-k">Comece por aqui</div>
+        <div class="dh-v" id="dhTitulo">Diagnóstico da loja</div>
+        <div class="dh-s" id="dhSub">Descubra qual dos 4 pilares está segurando o seu faturamento.</div>
+      </div>
+      <button class="dh-btn" onclick="go('diagnostico')">Fazer agora</button>
+    </div>
+
+    <div class="dash">
+      <button class="tile" onclick="go('diagnostico')">
+        <svg viewBox="0 0 24 24"><path d="M9 3h6v4H9z"/><path d="M5 7h14v14H5z"/><path d="M9 12h6M9 16h4"/></svg>
+        <b>Diagnóstico</b>
+        <small>Nota por pilar e o furo da sua loja</small>
+        <i class="tag">16 perguntas</i>
+      </button>
+
+      <button class="tile" onclick="irFerramenta('preco')">
+        <svg viewBox="0 0 24 24"><path d="M4 7h16v13H4z"/><path d="M8 4h8v3H8z"/><path d="M12 11v6M9.5 12.5h5M9.5 15.5h5"/></svg>
+        <b>Preço ideal</b>
+        <small>O preço que paga tudo e deixa margem</small>
+        <i class="tag">Pilar 2</i>
+      </button>
+
+      <button class="tile" onclick="irFerramenta('sobra')">
+        <svg viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7" ry="2.8"/><path d="M5 6v5c0 1.5 3.1 2.8 7 2.8s7-1.3 7-2.8V6"/><path d="M5 11v5c0 1.5 3.1 2.8 7 2.8s7-1.3 7-2.8v-5"/></svg>
+        <b>Quanto sobra</b>
+        <small>O lucro real do preço que você já pratica</small>
+        <i class="tag">Pilar 2</i>
+      </button>
+
+      <button class="tile" onclick="irFerramenta('ads')">
+        <svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>
+        <b>Ads</b>
+        <small>Suas métricas calculadas a partir do relatório</small>
+        <i class="tag">Pilar 3</i>
+      </button>
+
+      <button class="tile" onclick="irFerramenta('curva')">
+        <svg viewBox="0 0 24 24"><path d="M4 5h11M4 12h8M4 19h5"/><path d="M19 4v16M16.5 17.5 19 20l2.5-2.5"/></svg>
+        <b>Curva ABC</b>
+        <small>Cada anúncio com a ação certa</small>
+        <i class="tag">Pilar 4</i>
+      </button>
+
+      <button class="tile" onclick="go('plano')">
+        <svg viewBox="0 0 24 24"><path d="M5 3h14v18H5z"/><path d="M9 8l1.5 1.5L13 7M9 14l1.5 1.5L13 13"/></svg>
+        <b>Plano de ação</b>
+        <small>20 tarefas na ordem dos pilares</small>
+        <i class="tag" id="tilePlano">0% feito</i>
+      </button>
+    </div>
+
     <div class="card">
-      <h2>VENDER É ESTRUTURA</h2>
-      <p class="lead">Não é sorte, não é sazonalidade, não é algoritmo. É ordem. Um pilar só faz sentido depois que o anterior está de pé.</p>
+      <h3>A ORDEM É O MÉTODO</h3>
+      <p class="lead">Vender bem não é sorte, é estrutura. Um pilar só faz sentido depois que o anterior está de pé.</p>
       <div style="margin-top:6px">
         <div class="pilar"><div class="pnum">01</div><div><b>CONEXÃO</b><small>Quem compra de você e por quê.</small></div></div>
         <div class="pilar"><div class="pnum">02</div><div><b>ESTRUTURA</b><small>Preço certo antes do cadastro. Números antes de anúncio.</small></div></div>
         <div class="pilar"><div class="pnum">03</div><div><b>ATRAÇÃO</b><small>Orgânico, ferramentas, afiliados e Ads trabalhando juntos.</small></div></div>
         <div class="pilar"><div class="pnum">04</div><div><b>CONVERSÃO</b><small>Funil, número e cliente que volta.</small></div></div>
       </div>
-    </div>
-
-    <div class="card">
-      <h3>O QUE TEM AQUI DENTRO</h3>
-      <div class="rows">
-        <div class="row"><span>Diagnóstico da sua loja</span><b>4 PILARES</b></div>
-        <div class="row"><span>Calculadora de preço ideal</span><b>PILAR 2</b></div>
-        <div class="row"><span>Quanto sobra dessa venda</span><b>PILAR 2</b></div>
-        <div class="row"><span>Simulador de Ads</span><b>PILAR 3</b></div>
-        <div class="row"><span>Curva ABC dos anúncios</span><b>PILAR 4</b></div>
-        <div class="row"><span>Plano de ação dos 4 pilares</span><b>EXECUÇÃO</b></div>
-      </div>
-      <div class="note">Comece pelo <b>Diagnóstico</b>. Ele mostra qual pilar está furando na sua loja e por onde começar, sem chute.</div>
-      <button class="btn" onclick="go('diagnostico')">FAZER O DIAGNÓSTICO</button>
-      <button class="btn ghost" onclick="irFerramenta('preco')">Ir direto pras ferramentas</button>
     </div>
   </section>
 
@@ -966,7 +1022,7 @@ function lerPlano(){try{return JSON.parse(localStorage.getItem(PKEY)||'{}')}catc
 function togTask(id){
   const s=lerPlano(); s[id]=!s[id];
   try{localStorage.setItem(PKEY,JSON.stringify(s))}catch(e){}
-  renderPlano();
+  renderPlano(); atualizarDash();
 }
 function renderPlano(){
   const s=lerPlano(); let feito=0,total=0,h='';
@@ -985,6 +1041,31 @@ function renderPlano(){
   document.getElementById('planoBar').style.background=pct>=75?'var(--green)':pct>=40?'var(--yellow)':'var(--orange)';
 }
 renderCurva(); renderPlano();
+
+/* ---------- painel inicial dinâmico ---------- */
+const DKEY='kit4p_diag';
+function atualizarDash(){
+  const tp=document.getElementById('tilePlano');
+  if(tp){
+    const s=lerPlano(); let feito=0,total=0;
+    PLANO.forEach((b,bi)=>b.ts.forEach((t,ti)=>{total++;if(s[`${bi}_${ti}`])feito++}));
+    tp.textContent=(total?Math.round(feito/total*100):0)+'% feito';
+  }
+  let d=null; try{d=JSON.parse(localStorage.getItem(DKEY)||'null')}catch(e){}
+  const tit=document.getElementById('dhTitulo'), sub=document.getElementById('dhSub'),
+        btn=document.querySelector('.dh-btn'), k=document.querySelector('.dh-k');
+  if(!tit||!d) return;
+  const nomes=['CONEXÃO','ESTRUTURA','ATRAÇÃO','CONVERSÃO'];
+  const acoes=[
+    {t:'Comece pela Conexão',s:'Antes de qualquer conta, defina quem compra de você e por quê.',b:'Ver o plano',f:()=>go('plano')},
+    {t:'Arrume o seu preço',s:'A Estrutura é o seu furo. Calcule o preço que paga tudo e ainda deixa margem.',b:'Calcular',f:()=>irFerramenta('preco')},
+    {t:'Acerte o seu Ads',s:'A Atração é o seu furo. Veja as métricas reais dos seus anúncios.',b:'Analisar',f:()=>irFerramenta('ads')},
+    {t:'Leia os seus números',s:'A Conversão é o seu furo. Classifique os anúncios e veja o que fazer com cada um.',b:'Ver curva',f:()=>irFerramenta('curva')}
+  ];
+  const a=acoes[d.foco];
+  k.textContent='Seu diagnóstico: '+d.geral+'% · pilar '+nomes[d.foco];
+  tit.textContent=a.t; sub.textContent=a.s; btn.textContent=a.b; btn.onclick=a.f;
+}
 
 /* ---------- diagnóstico ---------- */
 const PILARES=[
@@ -1053,6 +1134,8 @@ function calcDiag(){
   const geral=Math.round(notas.reduce((a,b)=>a+b,0)/16*100);
   let foco=notas.findIndex(n=>n<3);
   if(foco===-1) foco=notas.indexOf(Math.min(...notas));
+  try{localStorage.setItem(DKEY,JSON.stringify({foco,geral}))}catch(e){}
+  atualizarDash();
 
   let blocos='';
   PILARES.forEach((p,pi)=>{
@@ -1089,11 +1172,15 @@ function calcDiag(){
   box.scrollIntoView({behavior:'smooth',block:'start'});
 }
 function refazerDiag(){
+  try{localStorage.removeItem(DKEY)}catch(e){}
   Object.keys(resp).forEach(k=>delete resp[k]);
   document.querySelectorAll('#quiz .opt').forEach(o=>o.className='opt');
   const box=document.getElementById('r_diag');box.className='res';box.innerHTML='';
   window.scrollTo({top:0,behavior:'smooth'});
 }
+
+/* boot */
+atualizarDash();
 </script>
 </body>
 </html>
