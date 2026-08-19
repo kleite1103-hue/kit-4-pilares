@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://kleite1103-hue.github.io/kit-4-pilares/sitemap.xml
+Sitemap: https://karinaleite.com.br/kit/sitemap.xml
