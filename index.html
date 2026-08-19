@@ -194,6 +194,21 @@ input[type=text]:focus,input[type=email]:focus,input[type=tel]:focus{border-colo
 .tile small{color:var(--muted);font-size:12.5px;line-height:1.35;flex:1}
 .tile .tag{font-family:'Space Mono',monospace;font-style:normal;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#5f6672}
 @media (max-width:340px){.dash{grid-template-columns:1fr}.dashhead{flex-direction:column;align-items:stretch}.dh-btn{width:100%}}
+/* aulas ao vivo */
+.live{background:linear-gradient(135deg,rgba(123,47,255,.18),rgba(255,77,28,.10));border:1px solid rgba(123,47,255,.42);
+  border-radius:16px;padding:18px;margin:14px 0}
+.live .k{display:flex;align-items:center;gap:7px;font-family:'Space Mono',monospace;font-size:10px;
+  letter-spacing:.2em;text-transform:uppercase;color:#b98cff}
+.live .dot{width:7px;height:7px;border-radius:99px;background:var(--orange);flex:none;animation:pulse 1.8s ease infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+.live h3{font-size:26px;line-height:1;margin-top:8px}
+.live p{color:var(--muted);font-size:13.5px;margin:8px 0 0}
+.live .acts{display:grid;gap:9px;margin-top:14px}
+.live a{display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;border-radius:12px;padding:13px;
+  font-family:'Bebas Neue',sans-serif;font-size:19px;letter-spacing:.05em}
+.live a svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.live a.ig{background:var(--orange);color:#fff}
+.live a.ca{background:transparent;border:1px solid var(--purple);color:#c4a3ff}
 .nextstep{margin-top:18px;border-top:1px solid var(--line);padding-top:16px}
 .nextstep .k{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
 .btnrow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
@@ -324,6 +339,8 @@ footer a{color:var(--orange);text-decoration:none}
         <i class="tag" id="tilePlano">0% feito</i>
       </button>
     </div>
+
+    <div id="liveHome"></div>
 
     <div class="card">
       <h3>A ORDEM É O MÉTODO</h3>
@@ -1042,6 +1059,28 @@ function renderPlano(){
 }
 renderCurva(); renderPlano();
 
+/* ---------- aulas ao vivo ---------- */
+const IG='https://instagram.com/kaalineleite';
+const CANAL=''; /* cole aqui o link do canal das aulas ao vivo */
+function blocoLive(intro){
+  return `<div class="live">
+    <div class="k"><span class="dot"></span>Toda quinta, ao vivo, de graça</div>
+    <h3>CONTINUE APRENDENDO COMIGO</h3>
+    <p>${intro||'Toda quinta eu abro uma aula ao vivo pra destravar loja na Shopee, sem custo. Me siga pra ser avisada e entre no canal pra não perder nenhuma.'}</p>
+    <div class="acts">
+      <a class="ig" href="${IG}" target="_blank" rel="noopener" onclick="fbqLive('seguir')">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></svg>
+        SEGUIR @KAALINELEITE
+      </a>
+      ${CANAL?`<a class="ca" href="${CANAL}" target="_blank" rel="noopener" onclick="fbqLive('canal')">
+        <svg viewBox="0 0 24 24"><path d="M4 6h11v12H4z"/><path d="M15 10.5 20 8v8l-5-2.5z"/></svg>
+        ENTRAR NO CANAL DAS AULAS
+      </a>`:''}
+    </div>
+  </div>`;
+}
+function fbqLive(qual){try{if(typeof fbq!=='undefined')fbq('track','Contact',{content_name:'aulas-ao-vivo-'+qual})}catch(e){}}
+
 /* ---------- painel inicial dinâmico ---------- */
 const DKEY='kit4p_diag';
 function atualizarDash(){
@@ -1160,6 +1199,7 @@ function calcDiag(){
         <span class="badge">Comece aqui</span><br>
         Seu ponto mais fraco é o pilar <b>${PILARES[foco].nome}</b>. Não pule pra frente: os pilares seguintes só funcionam depois que esse estiver de pé.
       </div>
+      ${blocoLive('Você acabou de ver onde a sua loja está furando. Toda quinta eu abro uma aula ao vivo, de graça, pra destravar exatamente esse tipo de coisa. Me siga pra ser avisada.')}
       <div class="nextstep">
         <div class="k">Seu próximo passo</div>
         <button class="btn" onclick="irFerramenta('${foco===2?'ads':'preco'}')">${foco===2?'SIMULAR MEU ADS AGORA':'ARRUMAR MEU PREÇO AGORA'}</button>
@@ -1180,6 +1220,7 @@ function refazerDiag(){
 }
 
 /* boot */
+document.getElementById('liveHome').innerHTML=blocoLive();
 atualizarDash();
 </script>
 </body>
