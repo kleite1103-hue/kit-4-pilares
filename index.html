@@ -35,7 +35,7 @@ body{
   background:var(--bg);color:var(--text);
   font-family:'Outfit',system-ui,sans-serif;
   font-weight:300;line-height:1.5;
-  padding-bottom:96px;
+  padding-bottom:130px;
   overflow-x:hidden;
 }
 h1,h2,h3,.bebas{font-family:'Bebas Neue',sans-serif;font-weight:400;letter-spacing:.02em;margin:0}
@@ -151,6 +151,12 @@ input[type=text]:focus,input[type=email]:focus,input[type=tel]:focus{border-colo
 .err{color:#ff5a5a;font-size:13px;margin-top:10px;display:none}
 .err.on{display:block}
 .priv{color:#5f6672;font-size:11.5px;text-align:center;margin-top:12px;line-height:1.45}
+.nextstep{margin-top:18px;border-top:1px solid var(--line);padding-top:16px}
+.nextstep .k{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.btnrow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.btnrow .btn{margin-top:0;font-size:17px;padding:14px 8px}
+.btn.sec{background:transparent;border:1px solid var(--orange);color:var(--orange)}
+.nextstep{margin-top:18px}
 footer{text-align:center;color:#4d535d;font-size:11px;font-family:'Space Mono',monospace;letter-spacing:.1em;padding:26px 0 10px}
 footer a{color:var(--orange);text-decoration:none}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -187,12 +193,11 @@ footer a{color:var(--orange);text-decoration:none}
       <label>Quanto sua loja fatura hoje por mês</label>
       <select id="f_fat">
         <option value="">Selecione</option>
-        <option>Estou iniciando</option>
-        <option>Até R$ 5 mil</option>
-        <option>R$ 5 mil a R$ 20 mil</option>
-        <option>R$ 20 mil a R$ 50 mil</option>
+        <option>R$ 0 a R$ 50 mil</option>
         <option>R$ 50 mil a R$ 100 mil</option>
-        <option>Acima de R$ 100 mil</option>
+        <option>R$ 100 mil a R$ 300 mil</option>
+        <option>R$ 300 mil a R$ 1 milhão</option>
+        <option>Acima de R$ 1 milhão</option>
       </select>
 
       <label>O que mais trava você hoje</label>
@@ -376,8 +381,8 @@ async function postRow(table,row){
 /* payload igual ao do quiz-efeito-vendas */
 function leadToHub(l){
   const p=normPhone(l.wpp), agora=new Date().toISOString();
-  const iniciante=(l.fat||'').toLowerCase().includes('iniciando')||!l.fat;
-  const tier = iniciante ? 'morno' : 'quente';
+  const baixo=(l.fat||'').includes('0 a R$ 50');
+  const tier = baixo ? 'morno' : 'quente';
   return {
     id:'pn_'+Date.now()+'_'+Math.random().toString(36).slice(2,6),
     name:l.nome||'Sem nome', first_name:(l.nome||'').split(' ')[0],
@@ -526,7 +531,14 @@ function calcPreco(){
     </div>
     ${ads>0?`<div class="note">Você pode gastar até <b>${brl(vAds)}</b> pra fazer uma venda. Isso significa um <b>ROAS mínimo de ${roasMin.toFixed(1)}x</b>. Abaixo disso, a venda acontece e o lucro não.</div>`:''}
     <div class="note">Seu ponto de equilíbrio é <b>${brl(equilibrio)}</b>. Vendeu abaixo disso, com esses custos, você está pagando pra trabalhar.</div>
-    <button class="btn ghost" onclick="levarPraAds(${p.toFixed(2)},${(lucro+vAds).toFixed(2)})">Levar esses números pro simulador de Ads</button>`;
+    <div class="nextstep">
+      <div class="k">Seu próximo passo</div>
+      <button class="btn" onclick="levarPraAds(${p.toFixed(2)},${(lucro+vAds).toFixed(2)})">LEVAR ESSES NÚMEROS PRO ADS</button>
+      <div class="btnrow">
+        <button class="btn sec" onclick="go('diagnostico')">Diagnóstico</button>
+        <button class="btn ghost" style="margin-top:0" onclick="go('inicio')">Início</button>
+      </div>
+    </div>`;
   box.scrollIntoView({behavior:'smooth',block:'start'});
 }
 function levarPraAds(p,l){
@@ -574,7 +586,14 @@ function calcAds(){
       <div class="row ${lucroLiq>=0?'ok':'bad'}"><span>Lucro por dia depois do Ads</span><b>${brl(lucroLiq)}</b></div>
     </div>
     <div class="note">Seu <b>ROAS de equilíbrio é ${roasEq.toFixed(1)}x</b>. Acima disso, o Ads paga a si mesmo e sobra lucro. Abaixo, você está comprando faturamento com o seu dinheiro.</div>
-    <div class="note">Campanha nova precisa de dados antes de julgamento. Deixe rodar os primeiros dias e só decida quando tiver volume de cliques suficiente pra o número significar alguma coisa.</div>`;
+    <div class="note">Campanha nova precisa de dados antes de julgamento. Deixe rodar os primeiros dias e só decida quando tiver volume de cliques suficiente pra o número significar alguma coisa.</div>
+    <div class="nextstep">
+      <div class="k">Seu próximo passo</div>
+      <div class="btnrow">
+        <button class="btn sec" onclick="go('preco')">Rever meu preço</button>
+        <button class="btn ghost" style="margin-top:0" onclick="go('diagnostico')">Diagnóstico</button>
+      </div>
+    </div>`;
   box.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
@@ -669,10 +688,22 @@ function calcDiag(){
         <span class="badge">Comece aqui</span><br>
         Seu ponto mais fraco é o pilar <b>${PILARES[foco].nome}</b>. Não pule pra frente: os pilares seguintes só funcionam depois que esse estiver de pé.
       </div>
-      ${foco===1?'<button class="btn" onclick="go(\'preco\')">ARRUMAR MEU PREÇO AGORA</button>':''}
-      ${foco===2?'<button class="btn" onclick="go(\'ads\')">SIMULAR MEU ADS AGORA</button>':''}
+      <div class="nextstep">
+        <div class="k">Seu próximo passo</div>
+        <button class="btn" onclick="go('${foco===2?'ads':'preco'}')">${foco===2?'SIMULAR MEU ADS AGORA':'ARRUMAR MEU PREÇO AGORA'}</button>
+        <div class="btnrow">
+          <button class="btn sec" onclick="go('${foco===2?'preco':'ads'}')">${foco===2?'Calculadora':'Simulador de Ads'}</button>
+          <button class="btn ghost" style="margin-top:0" onclick="refazerDiag()">Refazer</button>
+        </div>
+      </div>
     </div>`;
   box.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function refazerDiag(){
+  Object.keys(resp).forEach(k=>delete resp[k]);
+  document.querySelectorAll('#quiz .opt').forEach(o=>o.className='opt');
+  const box=document.getElementById('r_diag');box.className='res';box.innerHTML='';
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 </script>
 </body>
