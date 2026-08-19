@@ -151,6 +151,32 @@ input[type=text]:focus,input[type=email]:focus,input[type=tel]:focus{border-colo
 .err{color:#ff5a5a;font-size:13px;margin-top:10px;display:none}
 .err.on{display:block}
 .priv{color:#5f6672;font-size:11.5px;text-align:center;margin-top:12px;line-height:1.45}
+/* pills das ferramentas */
+.pills{display:flex;gap:8px;overflow-x:auto;padding:4px 0 2px;margin:14px 0 0;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.pills::-webkit-scrollbar{display:none}
+.pill{flex:none;background:var(--surface2);border:1px solid var(--line);color:var(--muted);border-radius:99px;
+  padding:9px 15px;font-family:'Outfit',sans-serif;font-size:13.5px;font-weight:500;cursor:pointer;white-space:nowrap}
+.pill.on{background:var(--orange);border-color:var(--orange);color:#fff}
+.tool{display:none}
+.tool.on{display:block}
+/* curva abc */
+.prod{display:flex;gap:12px;align-items:center;padding:13px 0;border-bottom:1px solid var(--line)}
+.prod:last-child{border-bottom:0}
+.prod .letra{font-family:'Bebas Neue',sans-serif;font-size:30px;line-height:1;width:34px;text-align:center;flex:none}
+.prod .info{flex:1;min-width:0}
+.prod .info b{font-weight:600;font-size:14.5px;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.prod .info small{color:var(--muted);font-size:12.5px;display:block;margin-top:2px}
+.prod .info .acao{font-size:12.5px;margin-top:4px}
+.prod .del{background:none;border:0;color:#4d535d;font-size:20px;cursor:pointer;padding:0 4px;flex:none}
+.empty{color:var(--muted);font-size:13.5px;text-align:center;padding:20px 10px;border:1px dashed var(--line);border-radius:12px;margin-top:14px}
+/* plano */
+.task{display:flex;gap:12px;align-items:flex-start;padding:13px 0;border-bottom:1px solid var(--line);cursor:pointer}
+.task:last-child{border-bottom:0}
+.box{width:22px;height:22px;border:1.5px solid var(--line);border-radius:6px;flex:none;margin-top:1px;position:relative}
+.task.done .box{background:var(--orange);border-color:var(--orange)}
+.task.done .box::after{content:"";position:absolute;left:7px;top:3px;width:5px;height:10px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+.task .txt{font-size:14.5px;line-height:1.4}
+.task.done .txt{color:#5f6672;text-decoration:line-through}
 .nextstep{margin-top:18px;border-top:1px solid var(--line);padding-top:16px}
 .nextstep .k{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
 .btnrow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
@@ -242,18 +268,73 @@ footer a{color:var(--orange);text-decoration:none}
     <div class="card">
       <h3>O QUE TEM AQUI DENTRO</h3>
       <div class="rows">
-        <div class="row"><span>Calculadora de preço</span><b>PILAR 2</b></div>
         <div class="row"><span>Diagnóstico da sua loja</span><b>4 PILARES</b></div>
+        <div class="row"><span>Calculadora de preço ideal</span><b>PILAR 2</b></div>
+        <div class="row"><span>Quanto sobra dessa venda</span><b>PILAR 2</b></div>
         <div class="row"><span>Simulador de Ads</span><b>PILAR 3</b></div>
+        <div class="row"><span>Curva ABC dos anúncios</span><b>PILAR 4</b></div>
+        <div class="row"><span>Plano de ação dos 4 pilares</span><b>EXECUÇÃO</b></div>
       </div>
       <div class="note">Comece pelo <b>Diagnóstico</b>. Ele mostra qual pilar está furando na sua loja e por onde começar, sem chute.</div>
       <button class="btn" onclick="go('diagnostico')">FAZER O DIAGNÓSTICO</button>
-      <button class="btn ghost" onclick="go('preco')">Ir direto pra calculadora</button>
+      <button class="btn ghost" onclick="irFerramenta('preco')">Ir direto pras ferramentas</button>
     </div>
   </section>
 
-  <!-- ================= PREÇO ================= -->
-  <section class="view" id="v-preco">
+  <!-- ================= FERRAMENTAS ================= -->
+  <section class="view" id="v-ferramentas">
+    <div class="pills">
+      <button class="pill on" data-tool="preco" onclick="tool('preco')">Preço ideal</button>
+      <button class="pill" data-tool="sobra" onclick="tool('sobra')">Quanto sobra</button>
+      <button class="pill" data-tool="ads" onclick="tool('ads')">Ads</button>
+      <button class="pill" data-tool="curva" onclick="tool('curva')">Curva ABC</button>
+    </div>
+
+    <!-- ---- QUANTO SOBRA ---- -->
+    <div class="tool" id="t-sobra">
+      <div class="card">
+        <h2>QUANTO SOBRA DESSA VENDA</h2>
+        <p class="lead">Você já vende por um preço. A pergunta é: sobra quanto? Coloque o preço que está no anúncio e descubra o lucro real.</p>
+
+        <label>Preço que você vende hoje (R$)</label>
+        <input type="number" id="s_preco" value="59.90" step="0.01" inputmode="decimal">
+        <div class="grid2">
+          <div><label>Custo do produto (R$)</label><input type="number" id="s_custo" value="20" step="0.01" inputmode="decimal"></div>
+          <div><label>Embalagem (R$)</label><input type="number" id="s_emb" value="1.50" step="0.01" inputmode="decimal"></div>
+        </div>
+        <label>Outros custos por venda (R$)</label>
+        <input type="number" id="s_outros" value="0" step="0.01" inputmode="decimal">
+        <div class="grid2">
+          <div><label>Imposto (%)</label><input type="number" id="s_imposto" value="4" step="0.1" inputmode="decimal"></div>
+          <div><label>Gasto em Ads por venda (R$)</label><input type="number" id="s_ads" value="0" step="0.01" inputmode="decimal"></div>
+        </div>
+        <label>Comissão de afiliado (%) <small>só entra nas vendas diretas, deixe 0 se não usa</small></label>
+        <input type="number" id="s_afi" value="0" step="0.5" inputmode="decimal">
+
+        <button class="btn" onclick="calcSobra()">VER QUANTO SOBRA</button>
+        <div class="res" id="r_sobra"></div>
+      </div>
+    </div>
+
+    <!-- ---- CURVA ABC ---- -->
+    <div class="tool" id="t-curva">
+      <div class="card">
+        <h2>CURVA ABC DOS ANÚNCIOS</h2>
+        <p class="lead">Pegue o relatório dos seus anúncios e jogue produto por produto aqui. Cada um sai com a nota e a ação certa: replicar, otimizar, reformular ou revisar.</p>
+
+        <label>Nome do produto</label>
+        <input type="text" id="cv_nome" placeholder="Ex: Organizador de gaveta">
+        <div class="grid2">
+          <div><label>ROAS</label><input type="number" id="cv_roas" value="5" step="0.1" inputmode="decimal"></div>
+          <div><label>CTR (%)</label><input type="number" id="cv_ctr" value="1.5" step="0.1" inputmode="decimal"></div>
+        </div>
+        <button class="btn" onclick="addCurva()">CLASSIFICAR PRODUTO</button>
+        <div id="curvaLista"></div>
+      </div>
+    </div>
+
+    <!-- ---- PREÇO ---- -->
+    <div class="tool on" id="t-preco">
     <div class="card">
       <h2>CALCULADORA DE PREÇO</h2>
       <p class="lead">Preencha seus custos. Ela devolve o preço de venda que paga a comissão, o imposto, o Ads e ainda deixa a sua margem.</p>
@@ -285,23 +366,10 @@ footer a{color:var(--orange);text-decoration:none}
 
       <div class="res" id="r_preco"></div>
     </div>
-  </section>
-
-  <!-- ================= DIAGNÓSTICO ================= -->
-  <section class="view" id="v-diagnostico">
-    <div class="card">
-      <h2>DIAGNÓSTICO DA LOJA</h2>
-      <p class="lead">16 perguntas. Responda com sinceridade, ninguém está vendo. No fim você descobre qual pilar está segurando o seu faturamento.</p>
     </div>
-    <div id="quiz"></div>
-    <div class="wrap" style="padding:0">
-      <button class="btn" onclick="calcDiag()">VER MEU DIAGNÓSTICO</button>
-    </div>
-    <div class="res" id="r_diag"></div>
-  </section>
 
-  <!-- ================= ADS ================= -->
-  <section class="view" id="v-ads">
+    <div class="tool" id="t-ads">
+
     <div class="card">
       <h2>SIMULADOR DE ADS</h2>
       <p class="lead">Antes de subir campanha, veja se a conta fecha. Coloque os números e descubra o ROAS que você precisa pra não pagar pra vender.</p>
@@ -322,6 +390,41 @@ footer a{color:var(--orange);text-decoration:none}
       <button class="btn" onclick="calcAds()">SIMULAR</button>
       <div class="res" id="r_ads"></div>
     </div>
+    </div>
+
+  </section>
+
+  <!-- ================= DIAGNÓSTICO ================= -->
+  <section class="view" id="v-diagnostico">
+    <div class="card">
+      <h2>DIAGNÓSTICO DA LOJA</h2>
+      <p class="lead">16 perguntas. Responda com sinceridade, ninguém está vendo. No fim você descobre qual pilar está segurando o seu faturamento.</p>
+    </div>
+    <div id="quiz"></div>
+    <div class="wrap" style="padding:0">
+      <button class="btn" onclick="calcDiag()">VER MEU DIAGNÓSTICO</button>
+    </div>
+    <div class="res" id="r_diag"></div>
+  </section>
+
+  <!-- ================= PLANO ================= -->
+  <section class="view" id="v-plano">
+    <div class="card">
+      <h2>PLANO DOS 4 PILARES</h2>
+      <p class="lead">O passo a passo da palestra virado em tarefa. Marque conforme faz, o progresso fica salvo no seu aparelho.</p>
+      <div class="scoreline" style="margin-top:14px"><b>SEU PROGRESSO</b><b id="planoPct">0%</b></div>
+      <div class="bar"><i id="planoBar" style="width:0%"></i></div>
+    </div>
+    <div id="planoLista"></div>
+    <div class="card">
+      <div class="nextstep" style="border-top:0;padding-top:0;margin-top:0">
+        <div class="k">Precisa de número pra executar</div>
+        <div class="btnrow">
+          <button class="btn sec" onclick="irFerramenta('preco')">Ferramentas</button>
+          <button class="btn ghost" style="margin-top:0" onclick="go('diagnostico')">Diagnóstico</button>
+        </div>
+      </div>
+    </div>
   </section>
 
   <footer>
@@ -335,10 +438,10 @@ footer a{color:var(--orange);text-decoration:none}
       <svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>INÍCIO</button>
     <button class="nb" data-t="diagnostico" onclick="go('diagnostico')">
       <svg viewBox="0 0 24 24"><path d="M9 3h6v4H9z"/><path d="M5 7h14v14H5z"/><path d="M9 12h6M9 16h4"/></svg>DIAGNÓSTICO</button>
-    <button class="nb" data-t="preco" onclick="go('preco')">
-      <svg viewBox="0 0 24 24"><path d="M4 7h16v13H4z"/><path d="M8 4h8v3H8z"/><path d="M12 11v6M9.5 12.5h5M9.5 15.5h5"/></svg>PREÇO</button>
-    <button class="nb" data-t="ads" onclick="go('ads')">
-      <svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>ADS</button>
+    <button class="nb" data-t="ferramentas" onclick="go('ferramentas')">
+      <svg viewBox="0 0 24 24"><path d="M4 7h16v13H4z"/><path d="M8 4h8v3H8z"/><path d="M12 11v6M9.5 12.5h5M9.5 15.5h5"/></svg>FERRAMENTAS</button>
+    <button class="nb" data-t="plano" onclick="go('plano')">
+      <svg viewBox="0 0 24 24"><path d="M5 3h14v18H5z"/><path d="M9 8l1.5 1.5L13 7M9 14l1.5 1.5L13 13"/></svg>PLANO</button>
   </div>
 </nav>
 
@@ -469,6 +572,13 @@ function go(t){
   document.querySelectorAll('.nb').forEach(b=>b.classList.toggle('active',b.dataset.t===t));
   window.scrollTo({top:0,behavior:'smooth'});
 }
+function tool(t){
+  document.querySelectorAll('.tool').forEach(x=>x.classList.remove('on'));
+  document.getElementById('t-'+t).classList.add('on');
+  document.querySelectorAll('.pill').forEach(b=>b.classList.toggle('on',b.dataset.tool===t));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function irFerramenta(t){ go('ferramentas'); tool(t); }
 const brl=n=>n.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
 const num=id=>parseFloat(String(document.getElementById(id).value).replace(',','.'))||0;
 
@@ -544,7 +654,7 @@ function calcPreco(){
 function levarPraAds(p,l){
   document.getElementById('a_preco').value=p;
   document.getElementById('a_lucro').value=l;
-  go('ads');
+  irFerramenta('ads');
 }
 
 /* ---------- simulador de ads ---------- */
@@ -590,12 +700,153 @@ function calcAds(){
     <div class="nextstep">
       <div class="k">Seu próximo passo</div>
       <div class="btnrow">
-        <button class="btn sec" onclick="go('preco')">Rever meu preço</button>
+        <button class="btn sec" onclick="irFerramenta('preco')">Rever meu preço</button>
         <button class="btn ghost" style="margin-top:0" onclick="go('diagnostico')">Diagnóstico</button>
       </div>
     </div>`;
   box.scrollIntoView({behavior:'smooth',block:'start'});
 }
+
+/* ---------- quanto sobra ---------- */
+function calcSobra(){
+  const p=num('s_preco');
+  const custo=num('s_custo')+num('s_emb')+num('s_outros');
+  const imp=num('s_imposto')/100, ads=num('s_ads'), afi=num('s_afi')/100;
+  const box=document.getElementById('r_sobra');
+  if(p<=0){box.className='res on';box.innerHTML='<div class="note"><b>Faltou o preço.</b> Coloque o valor que está no seu anúncio hoje.</div>';return}
+
+  const f=faixa(p);
+  const vCom=p*f.pct+f.fixo, vImp=p*imp, vAfi=p*afi;
+  const lucro=p-custo-vCom-vImp-vAfi-ads;
+  const lucroPct=lucro/p*100;
+  const antesAds=p-custo-vCom-vImp-vAfi;
+  const roasEq=antesAds>0?p/antesAds:0;
+
+  let veredito;
+  if(lucroPct>=20) veredito='Margem saudável. Esse produto aguenta investimento pra escalar.';
+  else if(lucroPct>=10) veredito='Margem apertada. Dá pra vender, mas sobra pouco fôlego pra Ads e promoção.';
+  else if(lucroPct>0) veredito='Margem no limite. Qualquer cupom, frete ou aumento de custo apaga esse lucro.';
+  else veredito='Esse produto está dando prejuízo. Cada venda tira dinheiro do seu bolso.';
+
+  box.className='res on';
+  box.innerHTML=`
+    <div class="hero-num">
+      <div class="lab">Sobra por venda</div>
+      <div class="val" style="color:${lucro>0?'inherit':'#ff5a5a'}">${brl(lucro)}</div>
+      <div class="sub">${lucroPct.toFixed(1)}% do preço &middot; comissão ${f.txt}</div>
+    </div>
+    <div class="rows">
+      <div class="row"><span>Preço de venda</span><b>${brl(p)}</b></div>
+      <div class="row"><span>Custo total do produto</span><b>-${brl(custo)}</b></div>
+      <div class="row"><span>Comissão Shopee</span><b>-${brl(vCom)}</b></div>
+      <div class="row"><span>Imposto</span><b>-${brl(vImp)}</b></div>
+      ${vAfi>0?`<div class="row"><span>Afiliado</span><b>-${brl(vAfi)}</b></div>`:''}
+      ${ads>0?`<div class="row"><span>Ads</span><b>-${brl(ads)}</b></div>`:''}
+      <div class="row ${lucro>0?'ok':'bad'}"><span>Sobra no fim</span><b>${brl(lucro)}</b></div>
+    </div>
+    <div class="note">${veredito}</div>
+    <div class="note">Sem contar Ads, sobram <b>${brl(antesAds)}</b> nessa venda. É esse o teto do que você pode gastar pra vender uma unidade, o que dá um <b>ROAS de equilíbrio de ${roasEq.toFixed(1)}x</b>.</div>
+    <div class="nextstep">
+      <div class="k">Seu próximo passo</div>
+      <div class="btnrow">
+        <button class="btn sec" onclick="tool('preco')">Qual seria o preço ideal</button>
+        <button class="btn ghost" style="margin-top:0" onclick="levarPraAds(${p.toFixed(2)},${antesAds.toFixed(2)})">Testar no Ads</button>
+      </div>
+    </div>`;
+  box.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+/* ---------- curva ABC ---------- */
+const CKEY='kit4p_curva';
+function lerCurva(){try{return JSON.parse(localStorage.getItem(CKEY)||'[]')}catch(e){return []}}
+function salvarCurva(a){try{localStorage.setItem(CKEY,JSON.stringify(a))}catch(e){}}
+function classificar(roas,ctr){
+  if(roas>=8&&ctr>=2) return {l:'A',cor:'var(--green)',t:'Curva A',a:'Replique. Esse é o produto que merece mais verba, mais variação e campanha própria.'};
+  if(roas>=8)         return {l:'A',cor:'var(--green)',t:'Curva A',a:'Replique com ajuste. O retorno está ótimo, mas o CTR baixo diz que a capa e o título ainda escondem esse produto.'};
+  if(roas>=4)         return {l:'B',cor:'#a8d94b',t:'Curva B',a:'Otimize. Mexa em capa, título e oferta antes de aumentar a verba.'};
+  if(roas>=2)         return {l:'C',cor:'var(--yellow)',t:'Curva C',a:'Reformule. Revise preço, ficha e imagem. Escalar assim só multiplica o custo.'};
+  if(ctr<1)           return {l:'!',cor:'#ff5a5a',t:'Revisar',a:'ROAS e CTR baixos. O anúncio não está atraindo nem convertendo. Volte pro cadastro e pra precificação antes de investir mais.'};
+  return                     {l:'!',cor:'#ff5a5a',t:'Revisar',a:'Atrai clique mas não converte. O problema está depois do clique: preço, ficha, avaliação ou oferta.'};
+}
+function addCurva(){
+  const nome=document.getElementById('cv_nome').value.trim()||'Produto sem nome';
+  const roas=num('cv_roas'), ctr=num('cv_ctr');
+  const a=lerCurva(); a.unshift({nome,roas,ctr}); salvarCurva(a);
+  document.getElementById('cv_nome').value='';
+  renderCurva();
+}
+function delCurva(i){const a=lerCurva();a.splice(i,1);salvarCurva(a);renderCurva()}
+function renderCurva(){
+  const el=document.getElementById('curvaLista'); const a=lerCurva();
+  if(!a.length){el.innerHTML='<div class="empty">Nenhum produto classificado ainda. Comece pelos que mais consomem verba.</div>';return}
+  let h='<div style="margin-top:16px">';
+  a.forEach((p,i)=>{
+    const c=classificar(p.roas,p.ctr);
+    h+=`<div class="prod">
+      <div class="letra" style="color:${c.cor}">${c.l}</div>
+      <div class="info">
+        <b>${esc(p.nome)}</b>
+        <small>${c.t} &middot; ROAS ${p.roas.toFixed(1)}x &middot; CTR ${p.ctr.toFixed(1)}%</small>
+        <div class="acao" style="color:#c8ccd3">${c.a}</div>
+      </div>
+      <button class="del" onclick="delCurva(${i})" aria-label="Remover">&times;</button>
+    </div>`;
+  });
+  el.innerHTML=h+'</div>';
+}
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+
+/* ---------- plano de ação ---------- */
+const PLANO=[
+ {p:'CONEXÃO',ts:[
+  'Escrever em uma frase quem é o cliente que compra o meu produto',
+  'Listar o problema que o meu produto resolve, na linguagem do cliente',
+  'Conferir a demanda do produto antes de comprar estoque, não depois',
+  'Definir por que ele compra de mim e não do vendedor ao lado']},
+ {p:'ESTRUTURA',ts:[
+  'Calcular o preço de venda com comissão, imposto, embalagem e verba de Ads dentro',
+  'Descobrir o lucro em reais de cada produto que vendo hoje',
+  'Comparar o preço calculado com o preço que estou praticando e corrigir',
+  'Preencher todos os campos da ficha, sem deixar nada vazio',
+  'Revisar título e primeira imagem dos produtos que mais recebem visita',
+  'Conferir se a operação aguenta o dobro do volume sem quebrar o atendimento']},
+ {p:'ATRAÇÃO',ts:[
+  'Deixar as ferramentas de marketing ativas o tempo todo, não só em data comemorativa',
+  'Ligar o programa de afiliados e calcular o custo real dele',
+  'Definir a verba de Ads por venda, não pela sobra do mês',
+  'Subir campanha com lance automático nos produtos novos e não mexer nos primeiros dias',
+  'Escolher um produto e apontar orgânico, afiliado e Ads pra ele ao mesmo tempo']},
+ {p:'CONVERSÃO',ts:[
+  'Abrir o funil de cada anúncio e anotar visitas, cliques e vendas',
+  'Identificar qual etapa está furando: falta visita, falta clique ou falta compra',
+  'Classificar os anúncios em curva A, B e C e definir a ação de cada um',
+  'Calcular quanto um cliente gasta comigo ao longo do tempo',
+  'Criar uma ação pro cliente voltar a comprar: cupom, kit ou lançamento']}
+];
+const PKEY='kit4p_plano';
+function lerPlano(){try{return JSON.parse(localStorage.getItem(PKEY)||'{}')}catch(e){return {}}}
+function togTask(id){
+  const s=lerPlano(); s[id]=!s[id];
+  try{localStorage.setItem(PKEY,JSON.stringify(s))}catch(e){}
+  renderPlano();
+}
+function renderPlano(){
+  const s=lerPlano(); let feito=0,total=0,h='';
+  PLANO.forEach((b,bi)=>{
+    h+=`<div class="card"><div class="pilar-tag">Pilar ${bi+1}</div><h3>${b.p}</h3><div style="margin-top:6px">`;
+    b.ts.forEach((t,ti)=>{
+      const id=`${bi}_${ti}`; const done=!!s[id]; total++; if(done)feito++;
+      h+=`<div class="task${done?' done':''}" onclick="togTask('${id}')"><div class="box"></div><div class="txt">${t}</div></div>`;
+    });
+    h+='</div></div>';
+  });
+  document.getElementById('planoLista').innerHTML=h;
+  const pct=total?Math.round(feito/total*100):0;
+  document.getElementById('planoPct').textContent=pct+'%';
+  document.getElementById('planoBar').style.width=pct+'%';
+  document.getElementById('planoBar').style.background=pct>=75?'var(--green)':pct>=40?'var(--yellow)':'var(--orange)';
+}
+renderCurva(); renderPlano();
 
 /* ---------- diagnóstico ---------- */
 const PILARES=[
@@ -690,9 +941,9 @@ function calcDiag(){
       </div>
       <div class="nextstep">
         <div class="k">Seu próximo passo</div>
-        <button class="btn" onclick="go('${foco===2?'ads':'preco'}')">${foco===2?'SIMULAR MEU ADS AGORA':'ARRUMAR MEU PREÇO AGORA'}</button>
+        <button class="btn" onclick="irFerramenta('${foco===2?'ads':'preco'}')">${foco===2?'SIMULAR MEU ADS AGORA':'ARRUMAR MEU PREÇO AGORA'}</button>
         <div class="btnrow">
-          <button class="btn sec" onclick="go('${foco===2?'preco':'ads'}')">${foco===2?'Calculadora':'Simulador de Ads'}</button>
+          <button class="btn sec" onclick="irFerramenta('${foco===2?'preco':'ads'}')">${foco===2?'Calculadora':'Simulador de Ads'}</button>
           <button class="btn ghost" style="margin-top:0" onclick="refazerDiag()">Refazer</button>
         </div>
       </div>
