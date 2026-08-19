@@ -548,7 +548,7 @@ footer a{color:var(--orange);text-decoration:none}
   </section>
 
   <footer>
-    EFEITO VENDAS &middot; <a href="https://instagram.com/kaalineleite" target="_blank" rel="noopener">@kaalineleite</a>
+    EFEITO VENDAS &middot; <a href="https://www.instagram.com/kaalineleite" target="_blank" rel="noopener">@kaalineleite</a>
   </footer>
 </div>
 
@@ -1061,21 +1061,21 @@ renderCurva(); renderPlano();
 
 /* ---------- aulas ao vivo ---------- */
 const IG='https://instagram.com/kaalineleite';
-const CANAL=''; /* cole aqui o link do canal das aulas ao vivo */
+const CANAL='https://www.instagram.com/channel/AbY1Aub0ff4VxkBD/';
 function blocoLive(intro){
   return `<div class="live">
     <div class="k"><span class="dot"></span>Toda quinta, ao vivo, de graça</div>
     <h3>CONTINUE APRENDENDO COMIGO</h3>
-    <p>${intro||'Toda quinta eu abro uma aula ao vivo pra destravar loja na Shopee, sem custo. Me siga pra ser avisada e entre no canal pra não perder nenhuma.'}</p>
+    <p>${intro||'Toda quinta eu abro uma aula ao vivo pra destravar loja na Shopee, sem custo. Entre no canal pra receber o aviso de cada aula, e me siga pra acompanhar o resto.'}</p>
     <div class="acts">
-      <a class="ig" href="${IG}" target="_blank" rel="noopener" onclick="fbqLive('seguir')">
-        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></svg>
-        SEGUIR @KAALINELEITE
-      </a>
-      ${CANAL?`<a class="ca" href="${CANAL}" target="_blank" rel="noopener" onclick="fbqLive('canal')">
+      ${CANAL?`<a class="ig" href="${CANAL}" target="_blank" rel="noopener" onclick="fbqLive('canal')">
         <svg viewBox="0 0 24 24"><path d="M4 6h11v12H4z"/><path d="M15 10.5 20 8v8l-5-2.5z"/></svg>
         ENTRAR NO CANAL DAS AULAS
       </a>`:''}
+      <a class="ca" href="${IG}" target="_blank" rel="noopener" onclick="fbqLive('seguir')">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></svg>
+        SEGUIR @KAALINELEITE
+      </a>
     </div>
   </div>`;
 }
@@ -1199,7 +1199,7 @@ function calcDiag(){
         <span class="badge">Comece aqui</span><br>
         Seu ponto mais fraco é o pilar <b>${PILARES[foco].nome}</b>. Não pule pra frente: os pilares seguintes só funcionam depois que esse estiver de pé.
       </div>
-      ${blocoLive('Você acabou de ver onde a sua loja está furando. Toda quinta eu abro uma aula ao vivo, de graça, pra destravar exatamente esse tipo de coisa. Me siga pra ser avisada.')}
+      ${blocoLive('Você acabou de ver onde a sua loja está furando. Toda quinta eu abro uma aula ao vivo, de graça, pra destravar exatamente esse tipo de coisa. Entre no canal pra ser avisada da próxima.')}
       <div class="nextstep">
         <div class="k">Seu próximo passo</div>
         <button class="btn" onclick="irFerramenta('${foco===2?'ads':'preco'}')">${foco===2?'SIMULAR MEU ADS AGORA':'ARRUMAR MEU PREÇO AGORA'}</button>
