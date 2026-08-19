@@ -311,6 +311,18 @@ footer a{color:var(--orange);text-decoration:none}
         <label>Comissão de afiliado (%) <small>só entra nas vendas diretas, deixe 0 se não usa</small></label>
         <input type="number" id="s_afi" value="0" step="0.5" inputmode="decimal">
 
+        <label>Tipo de conta</label>
+        <select id="s_cpf">
+          <option value="nao">CNPJ ou CPF com menos de 450 pedidos em 90 dias</option>
+          <option value="sim">CPF com mais de 450 pedidos em 90 dias (+R$ 3 por item)</option>
+        </select>
+
+        <label>Está em Campanha de Destaque?</label>
+        <select id="s_camp">
+          <option value="nao">Não</option>
+          <option value="sim">Sim (+2,5% de comissão no período)</option>
+        </select>
+
         <button class="btn" onclick="calcSobra()">VER QUANTO SOBRA</button>
         <div class="res" id="r_sobra"></div>
       </div>
@@ -355,11 +367,16 @@ footer a{color:var(--orange);text-decoration:none}
         <div><label>Margem desejada (%)</label><input type="number" id="c_margem" value="20" step="0.5" inputmode="decimal"></div>
       </div>
 
-      <label>Comissão da Shopee</label>
-      <select id="c_taxa">
-        <option value="auto">Automática pela faixa de preço</option>
-        <option value="20">20% + R$ 4,00</option>
-        <option value="14">14% + taxa fixa da faixa</option>
+      <label>Tipo de conta <small>a comissão é a mesma, o CPF de alto volume paga R$ 3 a mais por item</small></label>
+      <select id="c_cpf">
+        <option value="nao">CNPJ ou CPF com menos de 450 pedidos em 90 dias</option>
+        <option value="sim">CPF com mais de 450 pedidos em 90 dias (+R$ 3 por item)</option>
+      </select>
+
+      <label>Está em Campanha de Destaque?</label>
+      <select id="c_camp">
+        <option value="nao">Não</option>
+        <option value="sim">Sim (+2,5% de comissão no período)</option>
       </select>
 
       <button class="btn" onclick="calcPreco()">CALCULAR PREÇO IDEAL</button>
@@ -369,26 +386,56 @@ footer a{color:var(--orange);text-decoration:none}
     </div>
 
     <div class="tool" id="t-ads">
-
     <div class="card">
-      <h2>SIMULADOR DE ADS</h2>
-      <p class="lead">Antes de subir campanha, veja se a conta fecha. Coloque os números e descubra o ROAS que você precisa pra não pagar pra vender.</p>
+      <h2>ADS: A CONTA FECHA?</h2>
+      <p class="lead">Você não precisa saber calcular CPM. Cole os números que a Shopee já mostra no relatório e a ferramenta calcula todas as métricas pra você.</p>
 
-      <div class="grid2">
-        <div><label>Preço de venda (R$)</label><input type="number" id="a_preco" value="59.90" step="0.01" inputmode="decimal"></div>
-        <div><label>Lucro por venda sem Ads (R$)</label><input type="number" id="a_lucro" value="18.00" step="0.01" inputmode="decimal"></div>
+      <div class="pills" style="margin:16px 0 4px">
+        <button class="pill on" data-modo="rel" onclick="modoAds('rel')">Já rodo Ads</button>
+        <button class="pill" data-modo="est" onclick="modoAds('est')">Ainda vou começar</button>
       </div>
-      <label>Investimento por dia (R$)</label>
-      <input type="number" id="a_invest" value="30" step="1" inputmode="decimal">
-      <div class="grid2">
-        <div><label>CPM (R$)</label><input type="number" id="a_cpm" value="2.00" step="0.1" inputmode="decimal"></div>
-        <div><label>CTR (%)</label><input type="number" id="a_ctr" value="1.5" step="0.1" inputmode="decimal"></div>
-      </div>
-      <label>Taxa de conversão (%) <small>de cada 100 cliques, quantos viram venda</small></label>
-      <input type="number" id="a_conv" value="3" step="0.1" inputmode="decimal">
 
-      <button class="btn" onclick="calcAds()">SIMULAR</button>
-      <div class="res" id="r_ads"></div>
+      <div id="m-rel">
+        <div class="note" style="margin-top:14px">Abra <b>Shopee Ads</b>, escolha um período de 7 ou 14 dias e copie os números <b>de um produto só</b>.</div>
+        <div class="grid2">
+          <div><label>Despesa no período (R$)</label><input type="number" id="r_gasto" value="210" step="0.01" inputmode="decimal"></div>
+          <div><label>Impressões</label><input type="number" id="r_imp" value="105000" step="1" inputmode="numeric"></div>
+        </div>
+        <div class="grid2">
+          <div><label>Cliques</label><input type="number" id="r_cliq" value="1575" step="1" inputmode="numeric"></div>
+          <div><label>Pedidos pagos</label><input type="number" id="r_ped" value="47" step="1" inputmode="numeric"></div>
+        </div>
+        <label>Faturamento gerado pelos anúncios (R$) <small>a coluna de vendas ou GMV do relatório</small></label>
+        <input type="number" id="r_fat" value="2815" step="0.01" inputmode="decimal">
+        <label>Lucro por venda sem contar Ads (R$) <small>use o número que saiu em "Quanto sobra"</small></label>
+        <input type="number" id="r_lucro" value="20.02" step="0.01" inputmode="decimal">
+        <button class="btn" onclick="calcRelatorio()">ANALISAR MEUS ANÚNCIOS</button>
+        <div class="res" id="r_rel"></div>
+      </div>
+
+      <div id="m-est" style="display:none">
+        <div class="note" style="margin-top:14px">Sem histórico ainda. Use as referências abaixo e troque pelos seus números assim que a campanha rodar alguns dias.</div>
+        <div class="grid2">
+          <div><label>Preço de venda (R$)</label><input type="number" id="a_preco" value="59.90" step="0.01" inputmode="decimal"></div>
+          <div><label>Lucro por venda sem Ads (R$)</label><input type="number" id="a_lucro" value="20.02" step="0.01" inputmode="decimal"></div>
+        </div>
+        <label>Investimento por dia (R$)</label>
+        <input type="number" id="a_invest" value="30" step="1" inputmode="decimal">
+        <label>Quanto custa mil pessoas verem seu anúncio <small>isso é o CPM, deixe no padrão se não souber</small></label>
+        <select id="a_cpmsel" onchange="cpmSel()">
+          <option value="1.2">Nicho pouco disputado, cerca de R$ 1,20</option>
+          <option value="2" selected>Média da Shopee, cerca de R$ 2,00</option>
+          <option value="3.5">Nicho muito disputado, cerca de R$ 3,50</option>
+          <option value="custom">Eu sei o meu CPM</option>
+        </select>
+        <div id="cpmBox" style="display:none"><label>Meu CPM (R$)</label><input type="number" id="a_cpm" value="2.00" step="0.1" inputmode="decimal"></div>
+        <div class="grid2">
+          <div><label>CTR (%) <small>de cada 100 que veem, quantos clicam</small></label><input type="number" id="a_ctr" value="1.5" step="0.1" inputmode="decimal"></div>
+          <div><label>Conversão (%) <small>de cada 100 cliques, quantos compram</small></label><input type="number" id="a_conv" value="3" step="0.1" inputmode="decimal"></div>
+        </div>
+        <button class="btn" onclick="calcAds()">SIMULAR</button>
+        <div class="res" id="r_ads"></div>
+      </div>
     </div>
     </div>
 
@@ -582,19 +629,40 @@ function irFerramenta(t){ go('ferramentas'); tool(t); }
 const brl=n=>n.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
 const num=id=>parseFloat(String(document.getElementById(id).value).replace(',','.'))||0;
 
-/* ---------- comissão por faixa ---------- */
+/* ---------- comissão Shopee — 5 faixas (política vigente desde março/2026) ---------- */
 function faixa(p){
-  if(p<80)  return {pct:.20, fixo:4,  txt:'20% + R$ 4,00'};
-  if(p<100) return {pct:.14, fixo:16, txt:'14% + R$ 16,00'};
-  if(p<200) return {pct:.14, fixo:20, txt:'14% + R$ 20,00'};
-  return              {pct:.14, fixo:26, txt:'14% + R$ 26,00'};
+  if(p<8)   return {pct:.50, fixo:0,  n:1, txt:'50%'};
+  if(p<80)  return {pct:.20, fixo:4,  n:2, txt:'20% + R$ 4,00'};
+  if(p<100) return {pct:.14, fixo:16, n:3, txt:'14% + R$ 16,00'};
+  if(p<200) return {pct:.14, fixo:20, n:4, txt:'14% + R$ 20,00'};
+  return          {pct:.14, fixo:26, n:5, txt:'14% + R$ 26,00'};
 }
-function comissaoDe(p){
-  const modo=document.getElementById('c_taxa').value;
-  if(modo==='20') return {pct:.20,fixo:4,txt:'20% + R$ 4,00'};
-  if(modo==='14'){const f=faixa(p);return {pct:.14,fixo:f.fixo,txt:'14% + '+brl(f.fixo)};}
-  return faixa(p);
+function fmt(n){return n.toFixed(2).replace('.',',')}
+/* cpf = adicional de R$3 por item (CPF com mais de 450 pedidos em 90 dias)
+   camp = campanha de destaque, +2,5% sobre a comissão */
+function comissao(p,cpf,camp){
+  const f=faixa(p);
+  const pct=f.pct+(camp?0.025:0);
+  const fixo=f.fixo+(cpf?3:0);
+  const pv=Math.round(pct*1000)/10;
+  let txt=(pv%1===0?pv.toFixed(0):pv.toFixed(1))+'%'+(fixo>0?' + R$ '+fmt(fixo):'');
+  return {pct,fixo,n:f.n,txt};
 }
+function custoShopee(p,cpf,camp){const c=comissao(p,cpf,camp);return p*c.pct+c.fixo}
+/* alerta de fronteira: preço logo acima de um degrau deixa menos líquido que o centavo anterior */
+function alertaFaixa(p,cpf,camp){
+  for(const T of [8,80,100,200]){
+    if(p>=T && p<T*1.2){
+      const abaixo=T-0.01;
+      const liqP=p-custoShopee(p,cpf,camp), liqA=abaixo-custoShopee(abaixo,cpf,camp);
+      if(liqA>liqP) return `Atenção à fronteira de faixa. Vendendo a <b>R$ ${fmt(p)}</b> sobram <b>R$ ${fmt(liqP)}</b> depois da Shopee. Vendendo a <b>R$ ${fmt(abaixo)}</b>, que cai na faixa anterior, sobram <b>R$ ${fmt(liqA)}</b>. Baixar o preço aqui aumenta o que entra no seu bolso.`;
+    }
+  }
+  return '';
+}
+function contaCPF(pref){return document.getElementById(pref+'_cpf').value==='sim'}
+function contaCamp(pref){return document.getElementById(pref+'_camp').value==='sim'}
+function comissaoDe(p){ return comissao(p, contaCPF('c'), contaCamp('c')); }
 
 /* ---------- calculadora de preço ---------- */
 function calcPreco(){
@@ -640,6 +708,7 @@ function calcPreco(){
       <div class="row ok"><span>Lucro por venda</span><b>${brl(lucro)} · ${lucroPct.toFixed(1)}%</b></div>
     </div>
     ${ads>0?`<div class="note">Você pode gastar até <b>${brl(vAds)}</b> pra fazer uma venda. Isso significa um <b>ROAS mínimo de ${roasMin.toFixed(1)}x</b>. Abaixo disso, a venda acontece e o lucro não.</div>`:''}
+    ${alertaFaixa(p, contaCPF('c'), contaCamp('c'))?`<div class="note">${alertaFaixa(p, contaCPF('c'), contaCamp('c'))}</div>`:''}
     <div class="note">Seu ponto de equilíbrio é <b>${brl(equilibrio)}</b>. Vendeu abaixo disso, com esses custos, você está pagando pra trabalhar.</div>
     <div class="nextstep">
       <div class="k">Seu próximo passo</div>
@@ -654,7 +723,7 @@ function calcPreco(){
 function levarPraAds(p,l){
   document.getElementById('a_preco').value=p;
   document.getElementById('a_lucro').value=l;
-  irFerramenta('ads');
+  irFerramenta('ads'); modoAds('est');
 }
 
 /* ---------- simulador de ads ---------- */
@@ -673,11 +742,7 @@ function calcAds(){
   const lucroLiq=vendas*lucro-inv;
   const roasEq=lucro>0?preco/lucro:0;
 
-  let curva,cls;
-  if(roas>=8){curva='CURVA A · replique esse produto';cls='ok'}
-  else if(roas>=4){curva='CURVA B · otimize e mantenha';cls='ok'}
-  else if(roas>=2){curva='CURVA C · reformule anúncio e oferta';cls=''}
-  else {curva='ABAIXO DE 2x · revise antes de escalar';cls='bad'}
+  const cc=curvaDo(roas,num('a_ctr')); const curva=cc.t;
 
   box.className='res on';
   box.innerHTML=`
@@ -707,6 +772,78 @@ function calcAds(){
   box.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
+/* ---------- ads: modos ---------- */
+function modoAds(m){
+  document.getElementById('m-rel').style.display = m==='rel'?'block':'none';
+  document.getElementById('m-est').style.display = m==='est'?'block':'none';
+  document.querySelectorAll('.pill[data-modo]').forEach(b=>b.classList.toggle('on',b.dataset.modo===m));
+}
+function cpmSel(){
+  const v=document.getElementById('a_cpmsel').value;
+  const box=document.getElementById('cpmBox');
+  if(v==='custom'){box.style.display='block'}
+  else{box.style.display='none';document.getElementById('a_cpm').value=v}
+}
+function curvaDo(roas,ctr){
+  if(roas>=8&&ctr>=2) return {t:'CURVA A · replique esse produto',cls:'ok'};
+  if(roas>=8)         return {t:'CURVA A no retorno, CTR baixo',cls:'ok'};
+  if(roas>=4)         return {t:'CURVA B · otimize e mantenha',cls:'ok'};
+  if(roas>=2)         return {t:'CURVA C · reformule anúncio e oferta',cls:''};
+  return                     {t:'ABAIXO DE 2x · revise antes de escalar',cls:'bad'};
+}
+
+/* ---------- ads: análise do relatório ---------- */
+function calcRelatorio(){
+  const g=num('r_gasto'), imp=num('r_imp'), cliq=num('r_cliq'), ped=num('r_ped'),
+        fat=num('r_fat'), lucro=num('r_lucro');
+  const box=document.getElementById('r_rel');
+  if(g<=0||imp<=0){
+    box.className='res on';
+    box.innerHTML='<div class="note"><b>Faltou um número.</b> Despesa e impressões precisam ser maiores que zero, são eles que dão o CPM.</div>';
+    return;
+  }
+  const cpm=g/imp*1000, ctr=cliq/imp*100, conv=cliq>0?ped/cliq*100:0;
+  const cpc=cliq>0?g/cliq:0, cpa=ped>0?g/ped:0;
+  const roas=fat/g, ticket=ped>0?fat/ped:0;
+  const lucroLiq=ped*lucro-g;
+  const roasEq=(lucro>0&&ticket>0)?ticket/lucro:0;
+  const c=curvaDo(roas,ctr);
+
+  let leitura;
+  if(ctr<1) leitura='O CTR está baixo. O problema está antes do clique: a capa e o título não estão fazendo a pessoa parar. Mexa neles antes de mexer na verba.';
+  else if(conv<1.5) leitura='O anúncio atrai clique mas não fecha venda. O problema está depois do clique: preço, ficha, imagens internas ou avaliações.';
+  else if(roas>=8) leitura='Atração e conversão funcionando juntas. Esse é o produto que merece mais verba e variação.';
+  else leitura='As métricas estão medianas. Suba uma de cada vez: primeiro capa e título para o CTR, depois oferta e ficha para a conversão.';
+
+  box.className='res on';
+  box.innerHTML=`
+    <div class="hero-num">
+      <div class="lab">Seu ROAS no período</div>
+      <div class="val">${roas.toFixed(1)}x</div>
+      <div class="sub">${c.t}</div>
+    </div>
+    <div class="rows">
+      <div class="row hi"><span>CPM (mil impressões)</span><b>${brl(cpm)}</b></div>
+      <div class="row"><span>CTR</span><b>${ctr.toFixed(2)}%</b></div>
+      <div class="row"><span>Custo por clique</span><b>${brl(cpc)}</b></div>
+      <div class="row"><span>Taxa de conversão</span><b>${conv.toFixed(2)}%</b></div>
+      <div class="row hi"><span>Custo por venda</span><b>${ped>0?brl(cpa):'—'}</b></div>
+      <div class="row"><span>Ticket médio</span><b>${ped>0?brl(ticket):'—'}</b></div>
+      <div class="row ${lucroLiq>=0?'ok':'bad'}"><span>Lucro no período depois do Ads</span><b>${brl(lucroLiq)}</b></div>
+    </div>
+    <div class="note"><b>Seu CPM é ${brl(cpm)}.</b> Sai de uma conta só: despesa dividida pelas impressões, vezes mil. É quanto você paga pra mil pessoas verem o seu anúncio.</div>
+    ${roasEq>0?`<div class="note">Seu <b>ROAS de equilíbrio é ${roasEq.toFixed(1)}x</b>. Você está em ${roas.toFixed(1)}x, ou seja, ${roas>=roasEq?'o Ads paga a si mesmo e ainda sobra lucro':'cada venda está saindo do seu bolso'}.</div>`:''}
+    <div class="note">${leitura}</div>
+    <div class="nextstep">
+      <div class="k">Seu próximo passo</div>
+      <div class="btnrow">
+        <button class="btn sec" onclick="tool('curva')">Classificar na curva ABC</button>
+        <button class="btn ghost" style="margin-top:0" onclick="tool('sobra')">Conferir a margem</button>
+      </div>
+    </div>`;
+  box.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
 /* ---------- quanto sobra ---------- */
 function calcSobra(){
   const p=num('s_preco');
@@ -715,7 +852,7 @@ function calcSobra(){
   const box=document.getElementById('r_sobra');
   if(p<=0){box.className='res on';box.innerHTML='<div class="note"><b>Faltou o preço.</b> Coloque o valor que está no seu anúncio hoje.</div>';return}
 
-  const f=faixa(p);
+  const f=comissao(p, contaCPF('s'), contaCamp('s'));
   const vCom=p*f.pct+f.fixo, vImp=p*imp, vAfi=p*afi;
   const lucro=p-custo-vCom-vImp-vAfi-ads;
   const lucroPct=lucro/p*100;
@@ -745,6 +882,7 @@ function calcSobra(){
       <div class="row ${lucro>0?'ok':'bad'}"><span>Sobra no fim</span><b>${brl(lucro)}</b></div>
     </div>
     <div class="note">${veredito}</div>
+    ${alertaFaixa(p, contaCPF('s'), contaCamp('s'))?`<div class="note">${alertaFaixa(p, contaCPF('s'), contaCamp('s'))}</div>`:''}
     <div class="note">Sem contar Ads, sobram <b>${brl(antesAds)}</b> nessa venda. É esse o teto do que você pode gastar pra vender uma unidade, o que dá um <b>ROAS de equilíbrio de ${roasEq.toFixed(1)}x</b>.</div>
     <div class="nextstep">
       <div class="k">Seu próximo passo</div>
