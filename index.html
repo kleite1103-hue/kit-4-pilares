@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Kit dos 4 Pilares | Efeito Vendas</title>
+<meta name="description" content="As ferramentas dos 4 Pilares da Venda: calculadora de preço, diagnóstico da loja e simulador de Ads.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07080a;
+  --surface:#0e1014;
+  --surface2:#14171d;
+  --line:#20242c;
+  --orange:#ff4d1c;
+  --purple:#7B2FFF;
+  --text:#f2f3f5;
+  --muted:#8b919c;
+  --green:#16c47f;
+  --yellow:#ffb020;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:'Outfit',system-ui,sans-serif;
+  font-weight:300;line-height:1.5;
+  padding-bottom:96px;
+  overflow-x:hidden;
+}
+h1,h2,h3,.bebas{font-family:'Bebas Neue',sans-serif;font-weight:400;letter-spacing:.02em;margin:0}
+.mono{font-family:'Space Mono',monospace}
+.wrap{max-width:560px;margin:0 auto;padding:0 18px}
+
+/* topo */
+.top{padding:26px 0 8px;position:relative}
+.eyebrow{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--orange)}
+.top h1{font-size:44px;line-height:.92;margin-top:8px}
+.top h1 span{color:var(--orange)}
+.top p{color:var(--muted);font-size:14px;margin:10px 0 0}
+.rule{height:1px;background:linear-gradient(90deg,var(--orange),rgba(123,47,255,.5),transparent);margin:18px 0 4px}
+
+/* views */
+.view{display:none;animation:fade .25s ease}
+.view.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;margin:14px 0}
+.card h2{font-size:26px;line-height:1}
+.card h3{font-size:20px;line-height:1}
+.lead{color:var(--muted);font-size:14px;margin:8px 0 0}
+
+/* pilares na home */
+.pilar{display:flex;gap:14px;align-items:flex-start;padding:14px 0;border-bottom:1px solid var(--line)}
+.pilar:last-child{border-bottom:0}
+.pnum{font-family:'Space Mono',monospace;font-size:12px;color:var(--orange);padding-top:4px;min-width:22px}
+.pilar b{font-family:'Bebas Neue',sans-serif;font-size:22px;font-weight:400;letter-spacing:.02em;display:block;line-height:1}
+.pilar small{color:var(--muted);font-size:13px;display:block;margin-top:3px}
+
+/* form */
+label{display:block;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:14px 0 6px;font-weight:500}
+label small{text-transform:none;letter-spacing:0;display:block;font-size:12px;color:#5f6672;margin-top:2px}
+select{font-size:14px!important}
+input[type=number],select{
+  width:100%;background:var(--surface2);border:1px solid var(--line);border-radius:12px;
+  color:var(--text);font-family:'Space Mono',monospace;font-size:16px;padding:13px 14px;
+  appearance:none;outline:none;
+}
+input[type=number]:focus,select:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(255,77,28,.14)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid2 label{margin-top:14px}
+.btn{
+  width:100%;margin-top:20px;background:var(--orange);color:#fff;border:0;border-radius:12px;
+  font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.06em;padding:15px;cursor:pointer;
+}
+.btn:active{transform:scale(.99)}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--muted);font-size:16px;margin-top:10px}
+
+/* resultado */
+.res{display:none;margin-top:18px}
+.res.on{display:block}
+.hero-num{background:linear-gradient(160deg,rgba(255,77,28,.14),rgba(123,47,255,.10));border:1px solid rgba(255,77,28,.35);border-radius:16px;padding:20px;text-align:center}
+.hero-num .lab{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--orange)}
+.hero-num .val{font-family:'Bebas Neue',sans-serif;font-size:56px;line-height:1;margin-top:6px}
+.hero-num .sub{color:var(--muted);font-size:13px;margin-top:6px}
+.rows{margin-top:14px}
+.row{display:flex;justify-content:space-between;align-items:baseline;padding:11px 0;border-bottom:1px solid var(--line);font-size:14px}
+.row:last-child{border-bottom:0}
+.row span{color:var(--muted)}
+.row b{font-family:'Space Mono',monospace;font-weight:700;font-size:15px}
+.row.hi b{color:var(--orange)}
+.row.ok b{color:var(--green)}
+.row.bad b{color:#ff5a5a}
+.note{background:var(--surface2);border-left:2px solid var(--purple);border-radius:0 10px 10px 0;padding:12px 14px;margin-top:14px;font-size:13.5px;color:#c8ccd3}
+.note b{color:#fff;font-weight:600}
+
+/* diagnostico */
+.q{padding:14px 0;border-bottom:1px solid var(--line)}
+.q:last-of-type{border-bottom:0}
+.q p{margin:0 0 10px;font-size:15px;line-height:1.35}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.opt{background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:10px;text-align:center;
+  font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.1em;color:var(--muted);cursor:pointer}
+.opt.sel-y{border-color:var(--green);color:var(--green);background:rgba(22,196,127,.10)}
+.opt.sel-n{border-color:var(--orange);color:var(--orange);background:rgba(255,77,28,.10)}
+.pilar-tag{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--purple)}
+.bar{height:8px;background:var(--surface2);border-radius:99px;overflow:hidden;margin-top:8px}
+.bar i{display:block;height:100%;border-radius:99px;background:var(--orange);transition:width .5s ease}
+.scoreline{display:flex;justify-content:space-between;align-items:baseline;font-size:14px}
+.scoreline b{font-family:'Space Mono',monospace}
+.block{padding:14px 0;border-bottom:1px solid var(--line)}
+.block:last-child{border-bottom:0}
+.verdict{font-size:13.5px;color:#c8ccd3;margin:8px 0 0}
+.badge{display:inline-block;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  border:1px solid var(--orange);color:var(--orange);border-radius:99px;padding:4px 10px;margin-bottom:10px}
+
+/* nav */
+nav{position:fixed;bottom:0;left:0;right:0;background:rgba(10,11,14,.94);backdrop-filter:blur(14px);
+  border-top:1px solid var(--line);padding:8px 0 calc(8px + env(safe-area-inset-bottom));z-index:50}
+.navin{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
+.nb{background:none;border:0;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:4px;
+  padding:6px 2px;cursor:pointer;font-family:'Space Mono',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase}
+.nb svg{width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.nb.active{color:var(--orange)}
+footer{text-align:center;color:#4d535d;font-size:11px;font-family:'Space Mono',monospace;letter-spacing:.1em;padding:26px 0 10px}
+footer a{color:var(--orange);text-decoration:none}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="top">
+    <div class="eyebrow">Presente da palestra</div>
+    <h1>KIT DOS<br>4 <span>PILARES</span></h1>
+    <p>As ferramentas pra você aplicar o que viu no palco, na sua loja, hoje.</p>
+    <div class="rule"></div>
+  </div>
+
+  <!-- ================= INÍCIO ================= -->
+  <section class="view active" id="v-inicio">
+    <div class="card">
+      <h2>VENDER É ESTRUTURA</h2>
+      <p class="lead">Não é sorte, não é sazonalidade, não é algoritmo. É ordem. Um pilar só faz sentido depois que o anterior está de pé.</p>
+      <div style="margin-top:6px">
+        <div class="pilar"><div class="pnum">01</div><div><b>CONEXÃO</b><small>Quem compra de você e por quê.</small></div></div>
+        <div class="pilar"><div class="pnum">02</div><div><b>ESTRUTURA</b><small>Preço certo antes do cadastro. Números antes de anúncio.</small></div></div>
+        <div class="pilar"><div class="pnum">03</div><div><b>ATRAÇÃO</b><small>Orgânico, ferramentas, afiliados e Ads trabalhando juntos.</small></div></div>
+        <div class="pilar"><div class="pnum">04</div><div><b>CONVERSÃO</b><small>Funil, número e cliente que volta.</small></div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>O QUE TEM AQUI DENTRO</h3>
+      <div class="rows">
+        <div class="row"><span>Calculadora de preço</span><b>PILAR 2</b></div>
+        <div class="row"><span>Diagnóstico da sua loja</span><b>4 PILARES</b></div>
+        <div class="row"><span>Simulador de Ads</span><b>PILAR 3</b></div>
+      </div>
+      <div class="note">Comece pelo <b>Diagnóstico</b>. Ele mostra qual pilar está furando na sua loja e por onde começar, sem chute.</div>
+      <button class="btn" onclick="go('diagnostico')">FAZER O DIAGNÓSTICO</button>
+      <button class="btn ghost" onclick="go('preco')">Ir direto pra calculadora</button>
+    </div>
+  </section>
+
+  <!-- ================= PREÇO ================= -->
+  <section class="view" id="v-preco">
+    <div class="card">
+      <h2>CALCULADORA DE PREÇO</h2>
+      <p class="lead">Preencha seus custos. Ela devolve o preço de venda que paga a comissão, o imposto, o Ads e ainda deixa a sua margem.</p>
+
+      <div class="grid2">
+        <div><label>Custo do produto (R$)</label><input type="number" id="c_custo" value="20" step="0.01" inputmode="decimal"></div>
+        <div><label>Embalagem (R$)</label><input type="number" id="c_emb" value="1.50" step="0.01" inputmode="decimal"></div>
+      </div>
+      <label>Outros custos por venda (R$) <small>envio que sai do seu bolso, brinde, etiqueta</small></label>
+      <input type="number" id="c_outros" value="0" step="0.01" inputmode="decimal">
+
+      <div class="grid2">
+        <div><label>Imposto (%)</label><input type="number" id="c_imposto" value="4" step="0.1" inputmode="decimal"></div>
+        <div><label>Verba de Ads (%)</label><input type="number" id="c_ads" value="10" step="0.5" inputmode="decimal"></div>
+      </div>
+      <div class="grid2">
+        <div><label>Afiliado (%)</label><input type="number" id="c_afiliado" value="0" step="0.5" inputmode="decimal"></div>
+        <div><label>Margem desejada (%)</label><input type="number" id="c_margem" value="20" step="0.5" inputmode="decimal"></div>
+      </div>
+
+      <label>Comissão da Shopee</label>
+      <select id="c_taxa">
+        <option value="auto">Automática pela faixa de preço</option>
+        <option value="20">20% + R$ 4,00</option>
+        <option value="14">14% + taxa fixa da faixa</option>
+      </select>
+
+      <button class="btn" onclick="calcPreco()">CALCULAR PREÇO IDEAL</button>
+
+      <div class="res" id="r_preco"></div>
+    </div>
+  </section>
+
+  <!-- ================= DIAGNÓSTICO ================= -->
+  <section class="view" id="v-diagnostico">
+    <div class="card">
+      <h2>DIAGNÓSTICO DA LOJA</h2>
+      <p class="lead">16 perguntas. Responda com sinceridade, ninguém está vendo. No fim você descobre qual pilar está segurando o seu faturamento.</p>
+    </div>
+    <div id="quiz"></div>
+    <div class="wrap" style="padding:0">
+      <button class="btn" onclick="calcDiag()">VER MEU DIAGNÓSTICO</button>
+    </div>
+    <div class="res" id="r_diag"></div>
+  </section>
+
+  <!-- ================= ADS ================= -->
+  <section class="view" id="v-ads">
+    <div class="card">
+      <h2>SIMULADOR DE ADS</h2>
+      <p class="lead">Antes de subir campanha, veja se a conta fecha. Coloque os números e descubra o ROAS que você precisa pra não pagar pra vender.</p>
+
+      <div class="grid2">
+        <div><label>Preço de venda (R$)</label><input type="number" id="a_preco" value="59.90" step="0.01" inputmode="decimal"></div>
+        <div><label>Lucro por venda sem Ads (R$)</label><input type="number" id="a_lucro" value="18.00" step="0.01" inputmode="decimal"></div>
+      </div>
+      <label>Investimento por dia (R$)</label>
+      <input type="number" id="a_invest" value="30" step="1" inputmode="decimal">
+      <div class="grid2">
+        <div><label>CPM (R$)</label><input type="number" id="a_cpm" value="2.00" step="0.1" inputmode="decimal"></div>
+        <div><label>CTR (%)</label><input type="number" id="a_ctr" value="1.5" step="0.1" inputmode="decimal"></div>
+      </div>
+      <label>Taxa de conversão (%) <small>de cada 100 cliques, quantos viram venda</small></label>
+      <input type="number" id="a_conv" value="3" step="0.1" inputmode="decimal">
+
+      <button class="btn" onclick="calcAds()">SIMULAR</button>
+      <div class="res" id="r_ads"></div>
+    </div>
+  </section>
+
+  <footer>
+    EFEITO VENDAS &middot; <a href="https://instagram.com/kaalineleite" target="_blank" rel="noopener">@kaalineleite</a>
+  </footer>
+</div>
+
+<nav>
+  <div class="navin">
+    <button class="nb active" data-t="inicio" onclick="go('inicio')">
+      <svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>INÍCIO</button>
+    <button class="nb" data-t="diagnostico" onclick="go('diagnostico')">
+      <svg viewBox="0 0 24 24"><path d="M9 3h6v4H9z"/><path d="M5 7h14v14H5z"/><path d="M9 12h6M9 16h4"/></svg>DIAGNÓSTICO</button>
+    <button class="nb" data-t="preco" onclick="go('preco')">
+      <svg viewBox="0 0 24 24"><path d="M4 7h16v13H4z"/><path d="M8 4h8v3H8z"/><path d="M12 11v6M9.5 12.5h5M9.5 15.5h5"/></svg>PREÇO</button>
+    <button class="nb" data-t="ads" onclick="go('ads')">
+      <svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>ADS</button>
+  </div>
+</nav>
+
+<script>
+/* ---------- navegação ---------- */
+function go(t){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('v-'+t).classList.add('active');
+  document.querySelectorAll('.nb').forEach(b=>b.classList.toggle('active',b.dataset.t===t));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+const brl=n=>n.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const num=id=>parseFloat(String(document.getElementById(id).value).replace(',','.'))||0;
+
+/* ---------- comissão por faixa ---------- */
+function faixa(p){
+  if(p<80)  return {pct:.20, fixo:4,  txt:'20% + R$ 4,00'};
+  if(p<100) return {pct:.14, fixo:16, txt:'14% + R$ 16,00'};
+  if(p<200) return {pct:.14, fixo:20, txt:'14% + R$ 20,00'};
+  return              {pct:.14, fixo:26, txt:'14% + R$ 26,00'};
+}
+function comissaoDe(p){
+  const modo=document.getElementById('c_taxa').value;
+  if(modo==='20') return {pct:.20,fixo:4,txt:'20% + R$ 4,00'};
+  if(modo==='14'){const f=faixa(p);return {pct:.14,fixo:f.fixo,txt:'14% + '+brl(f.fixo)};}
+  return faixa(p);
+}
+
+/* ---------- calculadora de preço ---------- */
+function calcPreco(){
+  const custo=num('c_custo')+num('c_emb')+num('c_outros');
+  const imp=num('c_imposto')/100, ads=num('c_ads')/100,
+        afi=num('c_afiliado')/100, marg=num('c_margem')/100;
+  const box=document.getElementById('r_preco');
+
+  let p=Math.max(custo*2,10), com=comissaoDe(p);
+  for(let i=0;i<40;i++){
+    com=comissaoDe(p);
+    const den=1-(com.pct+imp+ads+afi+marg);
+    if(den<=0){
+      box.className='res on';
+      box.innerHTML='<div class="note"><b>Os percentuais passaram de 100%.</b> Comissão, imposto, Ads, afiliado e margem somados não podem chegar a 100% do preço. Reduza a margem desejada ou a verba de Ads e calcule de novo.</div>';
+      return;
+    }
+    const novo=(custo+com.fixo)/den;
+    if(Math.abs(novo-p)<0.005){p=novo;break}
+    p=novo;
+  }
+  com=comissaoDe(p);
+
+  const vCom=p*com.pct+com.fixo, vImp=p*imp, vAds=p*ads, vAfi=p*afi;
+  const lucro=p-custo-vCom-vImp-vAds-vAfi;
+  const lucroPct=lucro/p*100;
+  const roasMin= ads>0 ? (p/vAds) : 0;
+  const equilibrio=(custo+com.fixo)/(1-(com.pct+imp+ads+afi));
+
+  box.className='res on';
+  box.innerHTML=`
+    <div class="hero-num">
+      <div class="lab">Preço de venda ideal</div>
+      <div class="val">${brl(p)}</div>
+      <div class="sub">Comissão aplicada: ${com.txt}</div>
+    </div>
+    <div class="rows">
+      <div class="row"><span>Custo total do produto</span><b>${brl(custo)}</b></div>
+      <div class="row"><span>Comissão Shopee</span><b>${brl(vCom)}</b></div>
+      <div class="row"><span>Imposto</span><b>${brl(vImp)}</b></div>
+      ${vAfi>0?`<div class="row"><span>Afiliado</span><b>${brl(vAfi)}</b></div>`:''}
+      <div class="row hi"><span>Verba de Ads por venda</span><b>${brl(vAds)}</b></div>
+      <div class="row ok"><span>Lucro por venda</span><b>${brl(lucro)} · ${lucroPct.toFixed(1)}%</b></div>
+    </div>
+    ${ads>0?`<div class="note">Você pode gastar até <b>${brl(vAds)}</b> pra fazer uma venda. Isso significa um <b>ROAS mínimo de ${roasMin.toFixed(1)}x</b>. Abaixo disso, a venda acontece e o lucro não.</div>`:''}
+    <div class="note">Seu ponto de equilíbrio é <b>${brl(equilibrio)}</b>. Vendeu abaixo disso, com esses custos, você está pagando pra trabalhar.</div>
+    <button class="btn ghost" onclick="levarPraAds(${p.toFixed(2)},${(lucro+vAds).toFixed(2)})">Levar esses números pro simulador de Ads</button>`;
+  box.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function levarPraAds(p,l){
+  document.getElementById('a_preco').value=p;
+  document.getElementById('a_lucro').value=l;
+  go('ads');
+}
+
+/* ---------- simulador de ads ---------- */
+function calcAds(){
+  const preco=num('a_preco'), lucro=num('a_lucro'), inv=num('a_invest'),
+        cpm=num('a_cpm'), ctr=num('a_ctr')/100, conv=num('a_conv')/100;
+  const box=document.getElementById('r_ads');
+  if(cpm<=0||preco<=0){
+    box.className='res on';
+    box.innerHTML='<div class="note"><b>Faltou um número.</b> Preço de venda e CPM precisam ser maiores que zero.</div>';
+    return;
+  }
+  const imp=inv/cpm*1000, cliques=imp*ctr, vendas=cliques*conv;
+  const fat=vendas*preco, roas=inv>0?fat/inv:0;
+  const cpc=cliques>0?inv/cliques:0, cpa=vendas>0?inv/vendas:0;
+  const lucroLiq=vendas*lucro-inv;
+  const roasEq=lucro>0?preco/lucro:0;
+
+  let curva,cls;
+  if(roas>=8){curva='CURVA A · replique esse produto';cls='ok'}
+  else if(roas>=4){curva='CURVA B · otimize e mantenha';cls='ok'}
+  else if(roas>=2){curva='CURVA C · reformule anúncio e oferta';cls=''}
+  else {curva='ABAIXO DE 2x · revise antes de escalar';cls='bad'}
+
+  box.className='res on';
+  box.innerHTML=`
+    <div class="hero-num">
+      <div class="lab">ROAS projetado</div>
+      <div class="val">${roas.toFixed(1)}x</div>
+      <div class="sub">${curva}</div>
+    </div>
+    <div class="rows">
+      <div class="row"><span>Impressões por dia</span><b>${Math.round(imp).toLocaleString('pt-BR')}</b></div>
+      <div class="row"><span>Cliques por dia</span><b>${cliques.toFixed(0)}</b></div>
+      <div class="row"><span>Vendas por dia</span><b>${vendas.toFixed(1)}</b></div>
+      <div class="row"><span>Custo por clique</span><b>${brl(cpc)}</b></div>
+      <div class="row hi"><span>Custo por venda</span><b>${vendas>0?brl(cpa):'—'}</b></div>
+      <div class="row"><span>Faturamento por dia</span><b>${brl(fat)}</b></div>
+      <div class="row ${lucroLiq>=0?'ok':'bad'}"><span>Lucro por dia depois do Ads</span><b>${brl(lucroLiq)}</b></div>
+    </div>
+    <div class="note">Seu <b>ROAS de equilíbrio é ${roasEq.toFixed(1)}x</b>. Acima disso, o Ads paga a si mesmo e sobra lucro. Abaixo, você está comprando faturamento com o seu dinheiro.</div>
+    <div class="note">Campanha nova precisa de dados antes de julgamento. Deixe rodar os primeiros dias e só decida quando tiver volume de cliques suficiente pra o número significar alguma coisa.</div>`;
+  box.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+/* ---------- diagnóstico ---------- */
+const PILARES=[
+ {nome:'CONEXÃO',cor:'#ff4d1c',qs:[
+   'Você sabe dizer, em uma frase, quem é o cliente que compra o seu produto?',
+   'Você escolhe o que vender olhando demanda e dado, não gosto pessoal?',
+   'Seu produto resolve um problema que o cliente reconhece sozinho?',
+   'Você sabe por que o cliente compraria de você e não do vendedor ao lado?'],
+  bom:'Você sabe pra quem vende. Isso é o que faz todo o resto funcionar.',
+  ruim:'Você está vendendo pra "todo mundo". Enquanto isso não estiver claro, cadastro, Ads e promoção viram tentativa e erro caro.'},
+ {nome:'ESTRUTURA',cor:'#ff4d1c',qs:[
+   'Você sabe o lucro exato, em reais, de cada produto que vende?',
+   'Seu preço foi calculado com comissão, imposto, embalagem e verba de Ads dentro?',
+   'Seus anúncios estão completos: título, imagens, variações, ficha, sem campo vazio?',
+   'Sua operação aguenta dobrar o volume amanhã sem quebrar o atendimento?'],
+  bom:'Sua base está de pé. Agora crescer é seguro, porque cada venda a mais é lucro a mais.',
+  ruim:'Sua base está frágil. Vender mais sem os números certos só multiplica o prejuízo mais rápido. Comece pela precificação, antes do cadastro.'},
+ {nome:'ATRAÇÃO',cor:'#ff4d1c',qs:[
+   'Você mantém as ferramentas de marketing ativas o tempo todo, não só em data comemorativa?',
+   'Você tem o programa de afiliados ligado e sabe quanto ele custa de verdade?',
+   'Você investe em Ads com verba definida por venda, não com a sobra do mês?',
+   'Suas ações orgânicas e pagas trabalham no mesmo produto, ao mesmo tempo?'],
+  bom:'Você está orquestrando os canais. É isso que separa quem tem pico de quem tem constância.',
+  ruim:'Você está usando uma ferramenta de cada vez e esperando resultado de orquestra. Ligue as peças no mesmo produto e o custo por venda cai.'},
+ {nome:'CONVERSÃO',cor:'#ff4d1c',qs:[
+   'Você acompanha visitas, cliques e vendas de cada anúncio?',
+   'Você sabe qual etapa do funil está furando hoje?',
+   'Você sabe quanto um cliente gasta com você ao longo do tempo?',
+   'Você faz o cliente voltar a comprar de propósito, não por acaso?'],
+  bom:'Você lê número e transforma em decisão. Esse é o pilar que sustenta o crescimento no longo prazo.',
+  ruim:'Você está vendendo no escuro. Sem funil, você troca de estratégia por sensação, não por diagnóstico.'}
+];
+const resp={};
+(function montaQuiz(){
+  const el=document.getElementById('quiz');let i=0;
+  PILARES.forEach((p,pi)=>{
+    let h=`<div class="card"><div class="pilar-tag">Pilar ${pi+1}</div><h3>${p.nome}</h3>`;
+    p.qs.forEach((q,qi)=>{
+      const id=`${pi}_${qi}`;
+      h+=`<div class="q"><p>${q}</p><div class="opts">
+        <div class="opt" id="y${id}" onclick="mark('${id}',1)">SIM</div>
+        <div class="opt" id="n${id}" onclick="mark('${id}',0)">AINDA NÃO</div></div></div>`;
+      i++;
+    });
+    h+='</div>';el.insertAdjacentHTML('beforeend',h);
+  });
+})();
+function mark(id,v){
+  resp[id]=v;
+  document.getElementById('y'+id).className='opt'+(v?' sel-y':'');
+  document.getElementById('n'+id).className='opt'+(v?'':' sel-n');
+}
+function calcDiag(){
+  const box=document.getElementById('r_diag');
+  const total=Object.keys(resp).length;
+  if(total<16){
+    box.className='res on';
+    box.innerHTML=`<div class="card"><div class="note"><b>Faltam ${16-total} respostas.</b> Responda todas pra o diagnóstico apontar o pilar certo.</div></div>`;
+    box.scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+  const notas=PILARES.map((p,pi)=>{
+    let s=0;p.qs.forEach((q,qi)=>{s+=resp[`${pi}_${qi}`]||0});
+    return s;
+  });
+  const geral=Math.round(notas.reduce((a,b)=>a+b,0)/16*100);
+  let foco=notas.findIndex(n=>n<3);
+  if(foco===-1) foco=notas.indexOf(Math.min(...notas));
+
+  let blocos='';
+  PILARES.forEach((p,pi)=>{
+    const pct=notas[pi]/4*100;
+    blocos+=`<div class="block">
+      <div class="scoreline"><b>${p.nome}</b><b>${notas[pi]}/4</b></div>
+      <div class="bar"><i style="width:${pct}%;background:${pct>=75?'var(--green)':pct>=50?'var(--yellow)':'var(--orange)'}"></i></div>
+      <p class="verdict">${pct>=75?p.bom:p.ruim}</p>
+    </div>`;
+  });
+
+  box.className='res on';
+  box.innerHTML=`
+    <div class="card">
+      <div class="hero-num">
+        <div class="lab">Sua loja está estruturada em</div>
+        <div class="val">${geral}%</div>
+        <div class="sub">${geral>=80?'Estrutura sólida, hora de escalar':geral>=50?'Base começando, tem furo pra fechar':'Tem muito dinheiro na mesa'}</div>
+      </div>
+      <div style="margin-top:16px">${blocos}</div>
+      <div class="note" style="margin-top:16px">
+        <span class="badge">Comece aqui</span><br>
+        Seu ponto mais fraco é o pilar <b>${PILARES[foco].nome}</b>. Não pule pra frente: os pilares seguintes só funcionam depois que esse estiver de pé.
+      </div>
+      ${foco===1?'<button class="btn" onclick="go(\'preco\')">ARRUMAR MEU PREÇO AGORA</button>':''}
+      ${foco===2?'<button class="btn" onclick="go(\'ads\')">SIMULAR MEU ADS AGORA</button>':''}
+    </div>`;
+  box.scrollIntoView({behavior:'smooth',block:'start'});
+}
+</script>
+</body>
+</html>
